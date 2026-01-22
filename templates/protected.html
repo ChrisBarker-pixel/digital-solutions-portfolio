@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protected Page</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        .container { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); max-width: 600px; margin: auto; }
+        h1 { text-align: center; color: #333; }
+        p { text-align: center; font-size: 1.1em; }
+        .welcome { color: #28a745; font-weight: bold; }
+        ul { list-style-type: none; padding: 0; }
+        li { background-color: #e9ecef; margin-bottom: 8px; padding: 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
+        .flash-message { padding: 10px; margin-bottom: 15px; border-radius: 4px; text-align: center; }
+        .info { background-color: #d1ecf1; color: #0c5460; border-color: #bee5eb; }
+        button { padding: 8px 15px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #c82333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Protected Page</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        <li class="flash-message {{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <p class="welcome">Hello, <span id="current-user">{{ current_user }}</span>! You are logged in.</p>
+
+        <h2>Available Services</h2>
+        <ul id="services-list"></ul>
+
+        <h2>Available Dates</h2>
+        <ul id="dates-list"></ul>
+
+        <h2>Available Times</h2>
+        <ul id="times-list"></ul>
+
+        <h2>Book New Appointment</h2>
+        <form id="appointment-form">
+            <label for="service-select">Service:</label>
+            <select id="service-select" name="service" required></select><br><br>
+
+            <label for="date-select">Date:</label>
+            <select id="date-select" name="date" required></select><br><br>
+
+            <label for="time-select">Time:</label>
+            <select id="time-select" name="time" required></select><br><br>
+
+            <button type="submit">Book Appointment</button>
+        </form>
+
+        <h2>Your Appointments</h2>
+        <ul id="appointments-list"></ul>
+
+        <form action="{{ url_for('logout') }}" method="POST" style="margin-top: 20px;">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+
+    <script>
+        const currentUserId = document.getElementById('current-user').textContent;
+
+        async function fetchAppointments(url, elementId) {
+            const response = await fetch(url);
+            const data = await response.json();
+            const list = document.getElementById(elementId);
+            list.innerHTML = '';
+            if (Array.isArray(data)) {
+                data.forEach(item => {
+                    const li = document.createElement('li');
+                    if (elementId === 'appointments-list') {
+                        li.textContent = `Service: ${item.service}, Date: ${item.date}, Time: ${item.time}`;
+                    } else {
+                        li.textContent = item;
+                    }
+                    list.appendChild(li);
+                });
+            } else if (typeof data === 'object' && data !== null) {
+                // For single object responses, if needed, handle here
+            }
+            return data;
+        }
+
+        async function populateSelect(url, selectId) {
+            const data = await fetchAppointments(url, 'temp'); // Use a temp element as fetchAppointments expects one
+            const select = document.getElementById(selectId);
+            select.innerHTML = '';
+            data.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item;
+                option.textContent = item;
+                select.appendChild(option);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Fetch and display services, dates, times
+            populateSelect('/services', 'service-select');
+            populateSelect('/dates', 'date-select');
+            populateSelect('/times', 'time-select');
+            fetchAppointments('/appointments', 'appointments-list');
+
+            // Handle appointment booking
+            document.getElementById('appointment-form').addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const service = document.getElementById('service-select').value;
+                const date = document.getElementById('date-select').value;
+                const time = document.getElementById('time-select').value;
+
+                const response = await fetch('/appointments', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ service, date, time })
+                });
+                const result = await response.json();
+                alert(result.msg);
+                if (response.ok) {
+                    fetchAppointments('/appointments', 'appointments-list'); // Refresh appointments
+                }
+            });
+        });
+    </script>
+</body>
+</html>
