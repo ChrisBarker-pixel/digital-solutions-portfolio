@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "zenith-hub-2026-official"
+  },
+  "targets": {
+    "zenith-hub-2026-official": {
+      "hosting": {
+        "starwash": [
+          "starwash2026"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

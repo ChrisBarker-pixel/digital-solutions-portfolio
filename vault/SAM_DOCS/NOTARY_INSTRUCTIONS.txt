@@ -1,0 +1,11 @@
+
+    SAM.GOV NOTARY PACKET - ACTION REQUIRED:
+    1. Print 'Admin_Letter_Template.txt' on StarWash Letterhead.
+    2. Take your EIN Letter (from the IRS) to the Notary to ensure name matching.
+    3. SIGN ONLY in front of the Notary.
+    4. MAIL ORIGINAL TO:
+       FEDERAL SERVICE DESK
+       ATTN: SAM.GOV REGISTRATION PROCESSING
+       460 INDUSTRIAL BLVD
+       LONDON, KY 40741-7285
+    

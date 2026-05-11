@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZENITH SOLUTIONS | AGENT HUB</title>
+    <style>
+        :root {
+            --bg-pure: #050505; --accent-gold: #ffcc00; --accent-cyan: #00d4ff; --accent-red: #ff3300;
+            --spectrum: linear-gradient(90deg, #ff0000, #ff8800, #ffcc00, #00d4ff, #ff0000);
+        }
+        body, html { margin: 0; background: var(--bg-pure); color: white; font-family: 'Courier New', monospace; overflow-x: hidden; }
+
+        #gate-container { display: flex; justify-content: center; align-items: center; height: 100vh; transition: 0.8s; }
+        .landing-card { padding: 60px; background: #0a0a0a; border: 1px solid #1a1a1a; position: relative; text-align: center; }
+        .landing-card::after { content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; background: var(--spectrum); z-index: -1; animation: shimmer 4s linear infinite; }
+        @keyframes shimmer { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
+
+        .enter-btn { margin-top: 30px; background: linear-gradient(90deg, var(--accent-gold), var(--accent-cyan)); border: none; padding: 15px 40px; font-weight: 900; cursor: pointer; letter-spacing: 3px; }
+
+        #agent-room { display: none; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 100px 50px; }
+        .agent-node { background: rgba(255,255,255,0.03); border: 1px solid #222; padding: 25px; transition: 0.4s; cursor: pointer; text-align: center; }
+        .agent-node:hover { border-color: var(--accent-red); transform: translateY(-10px); }
+        .agent-visual img { width: 100%; height: 180px; object-fit: cover; opacity: 0.6; }
+        .zoom-out { transform: scale(0.9); opacity: 0; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+    <div id="gate-container">
+        <div class="landing-card">
+            <h1 style="letter-spacing: 8px;">ZENITH AGENT HUB</h1>
+            <button class="enter-btn" id="enter-btn">ENTER FOUNDRY</button>
+        </div>
+    </div>
+
+    <div id="agent-room">
+        <div style="grid-column: 1/-1; border-left: 3px solid var(--accent-red); padding-left: 20px; margin-bottom: 30px;">
+            <h2 style="color: var(--accent-gold); margin:0;">LATTICE INDEX ACTIVE</h2>
+            <p style="color: #666;">Select a logic node to initialize rental protocol.</p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            databaseURL: "https://zenith-hub-2026-official-default-rtdb.firebaseio.com/"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        document.getElementById('enter-btn').onclick = () => {
+            document.getElementById('gate-container').classList.add('zoom-out');
+            setTimeout(() => {
+                document.getElementById('gate-container').style.display = 'none';
+                document.getElementById('agent-room').style.display = 'grid';
+                syncAgents();
+            }, 600);
+        };
+
+        function syncAgents() {
+            const marketplaceRef = ref(db, 'public_marketplace');
+            onValue(marketplaceRef, (snapshot) => {
+                const room = document.getElementById('agent-room');
+                room.querySelectorAll('.agent-node').forEach(n => n.remove());
+                const data = snapshot.val();
+                if (data) {
+                    Object.keys(data).forEach(key => {
+                        const agent = data[key];
+                        const node = document.createElement('div');
+                        node.className = 'agent-node';
+                        node.onclick = () => window.location.href = agent.stripe_link || '#';
+                        node.innerHTML = `
+                            <div class="agent-visual"><img src="${agent.avatar_url || ''}" onerror="this.src='https://via.placeholder.com/300x180/000/ff3300?text=NODE_LOCKED'"></div>
+                            <h3 style="color:var(--accent-gold);">${agent.name}</h3>
+                            <p style="font-size:0.8rem; color:#888;">${agent.desc}</p>
+                            <div style="color:var(--accent-cyan); font-size:0.7rem; margin-top:15px;">RENTAL: ${agent.rental_price}</div>
+                        `;
+                        room.appendChild(node);
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>

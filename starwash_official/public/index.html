@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STAR WASH EXPRESS™ // Precision Mobile Detailing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #000;
+            background: radial-gradient(circle at top, #111 0%, #000 100%);
+            color: white;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+        }
+        .brand-text { font-size: 3.5rem; line-height: 1; font-weight: 900; text-decoration: underline; text-decoration-color: #39FF14; text-underline-offset: 12px; }
+        @media (min-width: 768px) { .brand-text { font-size: 5.5rem; } }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 5px rgba(57,255,20,0.2); }
+            50% { box-shadow: 0 0 20px rgba(57,255,20,0.5); }
+            100% { box-shadow: 0 0 5px rgba(57,255,20,0.2); }
+        }
+        .glow-active { animation: pulse-glow 2s infinite; }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #39FF14; border-radius: 10px; }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+
+    <div class="w-full bg-black/40 border-b border-white/5 py-2 px-8 flex justify-end items-center gap-2">
+        <span class="text-[8px] tracking-[0.3em] text-gray-500 uppercase font-bold">Node Status</span>
+        <div class="flex items-center gap-1">
+            <div class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+            <span class="text-[9px] tracking-[0.2em] text-cyan-400 font-black uppercase italic">Zenith Hub Official Online®</span>
+        </div>
+    </div>
+
+    <nav class="p-8 flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto gap-4">
+        <div class="brand-text uppercase italic">STAR<span class="text-[#39FF14]">WASH</span> <span class="text-gray-400">EXPRESS™</span></div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-8 pt-10 pb-20 grid md:grid-cols-2 gap-12 items-center">
+        <div>
+            <div class="inline-block px-3 py-1 border border-[#39FF14] text-[#39FF14] text-[10px] font-bold tracking-[0.3em] uppercase mb-4 glow-active">
+                Foundational 10 Program Active // 25% Auto-Applied
+            </div>
+            <h1 class="text-6xl md:text-8xl font-black uppercase tracking-tighter leading-none mb-6">
+                MOBILE <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-green-400">DETAIL</span> EXPERTS.
+            </h1>
+            <p class="text-gray-400 text-xs uppercase tracking-[0.3em] mb-8 font-bold italic">Precision Restoration // Grass Valley & Nevada City</p>
+            <a href="#pricing" class="bg-[#39FF14] text-black px-10 py-5 font-extrabold uppercase text-xs tracking-widest hover:bg-white transition-all shadow-[0_0_30px_rgba(57,255,20,0.3)] inline-block">Initialize Booking</a>
+        </div>
+        <div class="relative flex glass p-2 rounded-2xl bg-neutral-900 shadow-2xl aspect-video items-center justify-center overflow-hidden">
+             <img src="images/starwash.png" onerror="this.src='https://via.placeholder.com/800x450/111/39FF14?text=STAR+WASH+EXPRESS'" class="relative z-10 w-full h-auto object-contain max-h-full rounded-xl">
+        </div>
+    </main>
+
+    <section id="pricing" class="max-w-7xl mx-auto px-8 py-20 border-t border-white/10">
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 text-white text-center">
+            <div class="glass p-8 rounded-2xl flex flex-col justify-between hover:border-blue-400 transition-all">
+                <div>
+                    <div class="text-blue-400 text-[10px] font-bold tracking-widest mb-4 uppercase">OUTSIDE_ONLY</div>
+                    <h3 class="text-3xl font-bold mb-1">$63.75</h3>
+                    <p class="text-[10px] text-gray-500 line-through italic mb-2">WAS $85</p>
+                </div>
+                <button onclick="selectPackage('OUTSIDE_ONLY', 63.75)" class="block w-full py-3 mt-6 border border-white/20 text-[10px] font-bold uppercase hover:bg-blue-400 hover:text-black">Select</button>
+            </div>
+
+            <div class="glass p-8 rounded-2xl flex flex-col justify-between hover:border-cyan-400 transition-all">
+                <div>
+                    <div class="text-cyan-400 text-[10px] font-bold tracking-widest mb-4 uppercase">INSIDE_ONLY</div>
+                    <h3 class="text-3xl font-bold mb-1">$86.25</h3>
+                    <p class="text-[10px] text-gray-500 line-through italic mb-2">WAS $115</p>
+                </div>
+                <button onclick="selectPackage('INSIDE_ONLY', 86.25)" class="block w-full py-3 mt-6 border border-white/20 text-[10px] font-bold uppercase hover:bg-cyan-400 hover:text-black">Select</button>
+            </div>
+
+            <div class="glass p-8 rounded-2xl border-[#39FF14]/40 scale-105 shadow-[0_0_30px_rgba(57,255,20,0.15)] flex flex-col justify-between">
+                <div>
+                    <div class="text-[#39FF14] text-[10px] font-bold tracking-widest mb-4 uppercase">FULL_DETAIL</div>
+                    <h3 class="text-3xl font-bold mb-1">$168.75</h3>
+                    <p class="text-[10px] text-gray-400 line-through italic mb-2">WAS $225</p>
+                </div>
+                <button onclick="selectPackage('FULL_DETAIL', 168.75)" class="block w-full py-4 mt-6 bg-[#39FF14] text-black text-[10px] font-bold uppercase">Select</button>
+            </div>
+
+            <div class="glass p-8 rounded-2xl flex flex-col justify-between hover:border-white transition-all">
+                <div>
+                    <div class="text-white text-[10px] font-bold tracking-widest mb-4 uppercase">GLASS_CERAMIC</div>
+                    <h3 class="text-3xl font-bold mb-1">$48.75</h3>
+                    <p class="text-[10px] text-gray-500 line-through italic mb-2">WAS $65</p>
+                </div>
+                <button onclick="selectPackage('GLASS_CERAMIC', 48.75)" class="block w-full py-3 mt-6 border border-white/20 text-[10px] font-bold uppercase hover:bg-white hover:text-black">Select</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="intake" class="max-w-7xl mx-auto px-8 py-20 border-t border-white/10">
+        <div class="grid md:grid-cols-2 gap-16">
+            <div class="glass p-10 rounded-2xl border-[#39FF14]/20">
+                <h3 class="text-xs tracking-[0.5em] text-[#39FF14] uppercase font-bold mb-8 italic">Inlet Protocol</h3>
+                <form id="bookingForm" class="space-y-4">
+                    <input type="hidden" id="selectedPkg" value="FULL_DETAIL">
+                    <input type="hidden" id="pkgPrice" value="168.75">
+
+                    <input type="text" id="custName" placeholder="Customer Name" required class="w-full bg-black/50 border border-white/10 p-4 text-xs text-white focus:border-[#39FF14] outline-none">
+
+                    <input type="tel" id="custPhone" placeholder="Phone Number (Loyalty ID)" required class="w-full bg-black/50 border border-white/10 p-4 text-xs text-white focus:border-[#39FF14] outline-none">
+
+                    <input type="text" id="vehicle" placeholder="Year / Make / Model" required class="w-full bg-black/50 border border-white/10 p-4 text-xs text-white focus:border-[#39FF14] outline-none">
+                    <div class="space-y-1">
+                        <label class="text-[8px] text-gray-500 uppercase tracking-widest px-1">Select Time Window</label>
+                        <input type="datetime-local" id="apptDate" required class="w-full bg-black/50 border border-white/10 p-4 text-xs text-[#39FF14] outline-none [color-scheme:dark]">
+                    </div>
+                    <button type="submit" id="submitBtn" class="w-full bg-white text-black py-4 font-black uppercase text-[10px] tracking-[0.3em] hover:bg-[#39FF14] transition-all">Secure Booking</button>
+                </form>
+            </div>
+
+            <div>
+                <h3 class="text-xs tracking-[0.5em] text-[#39FF14] uppercase font-bold mb-4 italic">Voice of the 10</h3>
+                <div id="testimonialDisplay" class="space-y-4 font-mono overflow-y-auto max-h-[450px] pr-4">
+                    <div class="p-4 border border-white/5 text-gray-500 text-[10px] uppercase italic">Awaiting Verified Resonance...</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, where, orderBy, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC2FvmW6sGbTq195BVc0OGNtXzZrZ77PDw",
+            authDomain: "zenith-hub-2026-official.firebaseapp.com",
+            projectId: "zenith-hub-2026-official",
+            storageBucket: "zenith-hub-2026-official.firebasestorage.app",
+            messagingSenderId: "34818193234",
+            appId: "1:34818193234:web:zenith"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.selectPackage = (name, price) => {
+            document.getElementById('selectedPkg').value = name;
+            document.getElementById('pkgPrice').value = price;
+            document.getElementById('submitBtn').innerText = `READY: ${name} ($${price})`;
+            document.getElementById('intake').scrollIntoView();
+        };
+
+        document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.innerText = "TRANSMITTING...";
+            btn.disabled = true;
+
+            try {
+                await addDoc(collection(db, "starwash_bookings"), {
+                    customerName: document.getElementById('custName').value,
+                    customerPhone: document.getElementById('custPhone').value,
+                    vehicle: document.getElementById('vehicle').value,
+                    appointmentDate: document.getElementById('apptDate').value,
+                    package: document.getElementById('selectedPkg').value,
+                    priceLocked: parseFloat(document.getElementById('pkgPrice').value),
+                    status: "pending",
+                    timestamp: serverTimestamp()
+                });
+
+                btn.innerText = "SIGNAL LOCKED";
+                alert("Booking Secured. We will contact you shortly.");
+                e.target.reset();
+            } catch (err) {
+                btn.innerText = "ERROR";
+                console.error(err);
+            } finally {
+                btn.disabled = false;
+            }
+        });
+
+        // Live Testimonials
+        const qTest = query(collection(db, "Testimonial_Collection"), where("IS_VERIFIED_PURCHASER", "==", true), orderBy("SUBMISSION_TIMESTAMP", "desc"));
+        onSnapshot(qTest, (snap) => {
+            const display = document.getElementById('testimonialDisplay');
+            if (snap.empty) return;
+            display.innerHTML = '';
+            snap.forEach(doc => {
+                const d = doc.data();
+                display.innerHTML += `
+                    <div class="glass p-4 rounded-xl border-[#39FF14]/20 mb-4 transition-all hover:border-[#39FF14]">
+                        <div class="text-[#39FF14] text-[8px] mb-2">${'★'.repeat(d.RATING_SCORE || 5)}</div>
+                        <p class="text-white text-[11px] italic mb-2">"${d.TESTIMONIAL_BODY}"</p>
+                        <div class="text-gray-500 text-[8px] uppercase tracking-widest">— AUTH_SOURCE: ${doc.id.substring(0,6)}</div>
+                    </div>`;
+            });
+        });
+    </script>
+</body>
+</html>

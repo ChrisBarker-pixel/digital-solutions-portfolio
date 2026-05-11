@@ -1,0 +1,21 @@
+{
+  "projects": {
+    "default": "zenith-hub-2026-official"
+  },
+  "targets": {
+    "zenith-hub-2026-official": {
+      "hosting": {
+        "wingchun": [
+          "zenith-hub-2026-official"
+        ],
+        "starwash": [
+          "starwash2026"
+        ],
+        "sprout": [
+          "sprout-wing-chun"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

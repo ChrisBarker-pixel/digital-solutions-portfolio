@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZENITH SOLUTIONS // MASTER HUB</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #060606; color: #00FF00; font-family: 'Courier New', monospace; }
+        .node { border: 1px solid #1a1a1a; padding: 40px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); background: rgba(0,255,0,0.01); position: relative; }
+        .node:hover { border-color: #00FF00; background: rgba(0,255,0,0.03); transform: translateY(-5px); }
+        .glitch-text { text-shadow: 2px 2px #000; letter-spacing: -0.02em; }
+    </style>
+</head>
+<body class="p-12 min-h-screen border-t-4 border-[#00FF00]">
+    <header class="mb-24 max-w-7xl mx-auto">
+        <h1 class="text-6xl font-black italic uppercase text-white glitch-text">Zenith Solutions</h1>
+        <p class="text-[11px] tracking-[0.7em] text-[#00FF00] font-bold mt-4 opacity-70 uppercase">Infrastructure // Command_Center_v1</p>
+    </header>
+
+    <div class="grid md:grid-cols-2 gap-10 max-w-7xl mx-auto">
+        <a href="https://starwash2026.web.app" class="node group">
+            <div class="mb-10 text-[10px] text-gray-600 font-bold uppercase tracking-[0.3em]">Node_01 // Starwash</div>
+            <h2 class="text-3xl font-black text-white group-hover:text-[#39FF14] transition-colors uppercase italic mb-6">Star Wash Express™</h2>
+            <div class="h-1 w-12 bg-[#39FF14] mb-6"></div>
+            <p class="text-xs text-gray-400 leading-relaxed uppercase">Precision detailing & automated retail logistics infrastructure.</p>
+        </a>
+
+        <a href="https://sprout-wing-chun.web.app" class="node group">
+            <div class="mb-10 text-[10px] text-gray-600 font-bold uppercase tracking-[0.3em]">Node_02 // Training</div>
+            <h2 class="text-3xl font-black text-white group-hover:text-red-500 transition-colors uppercase italic mb-6">Sprout Wing Chun</h2>
+            <div class="h-1 w-12 bg-red-600 mb-6"></div>
+            <p class="text-xs text-gray-400 leading-relaxed uppercase">Martial arts training logic & tactical efficiency modeling.</p>
+        </a>
+    </div>
+
+    <footer class="mt-32 max-w-7xl mx-auto pt-8 border-t border-white/5 text-[9px] text-gray-800 uppercase tracking-[0.4em]">
+        © 2026 Zenith Solutions // Proprietary Deployment
+    </footer>
+</body>
+</html>

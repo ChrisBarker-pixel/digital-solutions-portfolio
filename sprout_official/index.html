@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprout Wing Chun | Sifu Chris Barker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-sprout: #39FF14;
+            --obsidian: #050505;
+            --charcoal: #111111;
+            --gold: #DAA520;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--obsidian);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        header {
+            padding: 40px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(to bottom, #0a0a0a, var(--obsidian));
+        }
+
+        .brand-logo { width: 140px; filter: drop-shadow(0 0 10px rgba(57, 255, 20, 0.2)); }
+
+        .center-gate {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .company-name {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            letter-spacing: 5px;
+            color: white;
+            text-shadow: 0 0 15px rgba(255,255,255,0.1);
+            white-space: nowrap;
+        }
+        .company-name span { color: var(--neon-sprout); }
+
+        .dummy-center { height: 200px; transition: 0.5s ease; }
+        .master-portrait { width: 140px; border: 2px solid var(--charcoal); }
+
+        /* --- THE WRITE-UP SECTION --- */
+        .manifesto {
+            padding: 80px 8% 60px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .manifesto h2 { font-family: 'Cinzel', serif; color: var(--neon-sprout); margin-bottom: 20px; font-size: 2rem; letter-spacing: 2px; }
+        .manifesto p {
+            font-size: 1.25rem; color: #ccc; margin-bottom: 30px; line-height: 1.9;
+            border-left: 3px solid var(--neon-sprout); padding-left: 25px;
+        }
+        .manifesto .highlight { color: var(--gold); font-weight: 600; }
+
+        /* --- INVESTMENT LATTICE --- */
+        .investment-lattice {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 2px; background: var(--border);
+        }
+        .price-node {
+            background: var(--obsidian); padding: 50px 20px; text-align: center;
+            transition: all 0.4s ease;
+        }
+        .price-node:hover { background: #0a0a0a; }
+        .price-node h3 { color: var(--gold); font-family: 'Cinzel', serif; margin-bottom: 15px; font-size: 0.85rem; letter-spacing: 2px; }
+        .price-node .amt { font-size: 3.5rem; font-weight: 800; color: var(--neon-sprout); margin: 10px 0; }
+
+        .payment-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            border: 1px solid var(--neon-sprout);
+            color: var(--neon-sprout);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        .payment-btn:hover {
+            background: var(--neon-sprout);
+            color: black;
+            box-shadow: 0 0 15px var(--neon-sprout);
+        }
+
+        .lineage-stack {
+            padding: 100px 8%; background: #000;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+        }
+        .cert-container { border: 1px solid var(--border); padding: 12px; background: #0a0a0a; }
+        .cert-container img { width: 100%; display: block; opacity: 0.85; }
+
+        .btn-action {
+            display: inline-block; padding: 22px 65px; background: var(--neon-sprout);
+            color: black; text-decoration: none; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 3px; margin-top: 40px;
+            transition: 0.3s;
+        }
+        .btn-action:hover { background: white; transform: translateY(-3px); box-shadow: 0 5px 15px var(--neon-sprout); }
+
+        footer { padding: 40px; text-align: center; border-top: 1px solid var(--border); color: #333; font-size: 0.75rem; letter-spacing: 1px; }
+
+        @media (max-width: 1100px) {
+            header { flex-direction: column; gap: 40px; }
+            .company-name { font-size: 1.8rem; }
+            .investment-lattice, .lineage-stack { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="my_logo.png" alt="Logo" class="brand-logo">
+        <div class="center-gate">
+            <h1 class="company-name">SPROUT <span>WING CHUN</span></h1>
+            <img src="dummy.png" alt="Mook Yan Jong" class="dummy-center">
+        </div>
+        <img src="my_picture.jpg" alt="Sifu Chris Barker" class="master-portrait">
+    </header>
+
+    <section class="manifesto">
+        <h2>The Little Idea.</h2>
+        <p>
+            In the Wing Chun system, <span class="highlight">Siu Nim Tao</span> is the first and most vital form. Translated as the "Small Idea," it serves as the <span class="highlight">Seed</span> for the entire system.
+            <br><br>
+            The Sprout represents the immense power of softness—the ability to penetrate the hard aspects of both self-defense and life through persistent growth. This is a system designed not just for combat, but for <span class="highlight">longevity</span>. It preserves the body, strengthens the joints, muscles, and tendons, and allows a practitioner to remain effective well into their later years.
+            <br><br>
+            By combining the hard and soft aspects of traditional Chinese martial arts, Sprout Wing Chun offers a path that is beneficial for all stages of life. To ensure the highest fidelity of transmission, training is typically conducted <span class="highlight">one-on-one</span> for the best results.
+        </p>
+
+        <div style="text-align: center;">
+            <a href="https://calendly.com/sproutwingchun" class="btn-action" target="_blank">Book Your Session</a>
+            <p style="margin-top: 50px; color: var(--gold); font-weight: bold; font-size: 0.9rem; letter-spacing: 4px; text-transform: uppercase;">Grass Valley | Nevada City | California</p>
+        </div>
+    </section>
+
+    <div class="investment-lattice">
+        <div class="price-node">
+            <h3>PRIVATE STRIKE</h3>
+            <p>30 Minutes</p>
+            <div class="amt">$15</div>
+            <a href="https://buy.stripe.com/3cI9ATgR81rW8FJ13mdIA0a" class="payment-btn">Enroll Now</a>
+        </div>
+        <div class="price-node">
+            <h3>FULL IMMERSION</h3>
+            <p>60 Minutes</p>
+            <div class="amt">$30</div>
+            <a href="https://buy.stripe.com/28E14n7gy5Ic7BF27qdIA08" class="payment-btn">Enroll Now</a>
+        </div>
+        <div class="price-node">
+            <h3>MONTHLY CORE</h3>
+            <p>2 Days / Week</p>
+            <div class="amt">$100</div>
+            <a href="https://buy.stripe.com/dRmeVdasKgmQ9JNaDWdIA07" class="payment-btn">Enroll Now</a>
+        </div>
+    </div>
+
+    <section class="lineage-stack">
+        <div class="cert-container">
+            <img src="certification.jpg" alt="Lineage Certificate">
+        </div>
+        <div>
+            <h2 style="font-family: 'Cinzel', serif; color: var(--neon-sprout); font-size: 2.5rem; margin-bottom: 25px;">AUTHENTICITY.</h2>
+            <p style="color: #777; margin-bottom: 25px; line-height: 1.8;">Certified under <strong>Sifu Jerry Thao</strong>. My mission is to guide students through the structural alignment and mechanics required to turn the 'Small Idea' into unstoppable growth.</p>
+            <p style="color: var(--gold); font-weight: bold; letter-spacing: 2px;">530-821-1259 | SPROUTWINGCHUN@GMAIL.COM</p>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2026 SPROUT WING CHUN | SIFU CHRIS BARKER | POWERED BY ZENITH OS
+    </footer>
+
+</body>
+</html>

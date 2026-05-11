@@ -1,0 +1,21 @@
+
+    [StarWash Business Letterhead]
+
+    SUBJECT: Information Required to Activate Registration in SAM
+
+    To: System for Award Management (SAM) Administrator
+
+    This letter is to designate Christopher Barker as the Entity Administrator 
+    for Sprout Wing Chun / StarWash. 
+
+    Entity Legal Name: [Legal Name]
+    Entity Address: [Physical Address - No PO Box]
+    Taxpayer Identification Number (TIN): [EIN]
+
+    [Christopher Barker] is authorized to manage the entity's registration 
+    and provide information for the purpose of receiving federal funding.
+
+    Signed,
+    Christopher Barker
+    [Owner/Partner]
+    
