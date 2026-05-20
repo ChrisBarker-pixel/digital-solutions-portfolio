@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "zenith-hub-2026-official"
+    "default": "zenith-agent-foundry"
   },
   "targets": {
     "zenith-hub-2026-official": {

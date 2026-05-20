@@ -58,47 +58,137 @@
             <p class="text-gray-400 text-xs uppercase tracking-[0.3em] mb-8 font-bold italic">Precision Restoration // Grass Valley & Nevada City</p>
             <a href="#pricing" class="bg-[#39FF14] text-black px-10 py-5 font-extrabold uppercase text-xs tracking-widest hover:bg-white transition-all shadow-[0_0_30px_rgba(57,255,20,0.3)] inline-block">Initialize Booking</a>
         </div>
-        <div class="relative flex glass p-2 rounded-2xl bg-neutral-900 shadow-2xl aspect-video items-center justify-center overflow-hidden">
-             <img src="images/starwash.png" onerror="this.src='https://via.placeholder.com/800x450/111/39FF14?text=STAR+WASH+EXPRESS'" class="relative z-10 w-full h-auto object-contain max-h-full rounded-xl">
+        <div class="relative flex glass p-4 rounded-2xl bg-neutral-900 shadow-2xl aspect-video items-center justify-center overflow-hidden">
+             <img src="images/Subject.jpg" onerror="this.src='images/starwash.png'" class="relative z-10 w-full h-auto object-contain max-h-full rounded-xl transition-transform duration-500 hover:scale-105">
         </div>
     </main>
 
     <section id="pricing" class="max-w-7xl mx-auto px-8 py-20 border-t border-white/10">
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 text-white text-center">
-            <div class="glass p-8 rounded-2xl flex flex-col justify-between hover:border-blue-400 transition-all">
+        <div id="packageGrid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 text-white text-center">
+
+            <div id="OUTSIDE_ONLY" class="package-card glass p-8 rounded-2xl flex flex-col justify-between border border-transparent transition-all duration-300">
                 <div>
                     <div class="text-blue-400 text-[10px] font-bold tracking-widest mb-4 uppercase">OUTSIDE_ONLY</div>
                     <h3 class="text-3xl font-bold mb-1">$63.75</h3>
                     <p class="text-[10px] text-gray-500 line-through italic mb-2">WAS $85</p>
                 </div>
-                <button onclick="selectPackage('OUTSIDE_ONLY', 63.75)" class="block w-full py-3 mt-6 border border-white/20 text-[10px] font-bold uppercase hover:bg-blue-400 hover:text-black">Select</button>
+                <button onclick="selectPackage('OUTSIDE_ONLY', 63.75)" class="select-btn block w-full py-3 mt-6 border border-white/20 text-[10px] font-bold uppercase text-white bg-transparent transition-all duration-200">Select</button>
             </div>
 
-            <div class="glass p-8 rounded-2xl flex flex-col justify-between hover:border-cyan-400 transition-all">
+            <div id="INSIDE_ONLY" class="package-card glass p-8 rounded-2xl flex flex-col justify-between border border-transparent transition-all duration-300">
                 <div>
                     <div class="text-cyan-400 text-[10px] font-bold tracking-widest mb-4 uppercase">INSIDE_ONLY</div>
                     <h3 class="text-3xl font-bold mb-1">$86.25</h3>
                     <p class="text-[10px] text-gray-500 line-through italic mb-2">WAS $115</p>
                 </div>
-                <button onclick="selectPackage('INSIDE_ONLY', 86.25)" class="block w-full py-3 mt-6 border border-white/20 text-[10px] font-bold uppercase hover:bg-cyan-400 hover:text-black">Select</button>
+                <button onclick="selectPackage('INSIDE_ONLY', 86.25)" class="select-btn block w-full py-3 mt-6 border border-white/20 text-[10px] font-bold uppercase text-white bg-transparent transition-all duration-200">Select</button>
             </div>
 
-            <div class="glass p-8 rounded-2xl border-[#39FF14]/40 scale-105 shadow-[0_0_30px_rgba(57,255,20,0.15)] flex flex-col justify-between">
+            <div id="FULL_DETAIL" class="package-card glass p-8 rounded-2xl flex flex-col justify-between border border-[#39FF14]/40 scale-105 shadow-[0_0_30px_rgba(57,255,20,0.15)] transition-all duration-300">
                 <div>
                     <div class="text-[#39FF14] text-[10px] font-bold tracking-widest mb-4 uppercase">FULL_DETAIL</div>
                     <h3 class="text-3xl font-bold mb-1">$168.75</h3>
                     <p class="text-[10px] text-gray-400 line-through italic mb-2">WAS $225</p>
                 </div>
-                <button onclick="selectPackage('FULL_DETAIL', 168.75)" class="block w-full py-4 mt-6 bg-[#39FF14] text-black text-[10px] font-bold uppercase">Select</button>
+                <button onclick="selectPackage('FULL_DETAIL', 168.75)" class="select-btn block w-full py-4 mt-6 bg-[#39FF14] text-black text-[10px] font-bold uppercase transition-all duration-200">Select</button>
             </div>
 
-            <div class="glass p-8 rounded-2xl flex flex-col justify-between hover:border-white transition-all">
+            <div id="GLASS_CERAMIC" class="package-card glass p-8 rounded-2xl flex flex-col justify-between border border-transparent transition-all duration-300">
                 <div>
                     <div class="text-white text-[10px] font-bold tracking-widest mb-4 uppercase">GLASS_CERAMIC</div>
                     <h3 class="text-3xl font-bold mb-1">$48.75</h3>
                     <p class="text-[10px] text-gray-500 line-through italic mb-2">WAS $65</p>
                 </div>
-                <button onclick="selectPackage('GLASS_CERAMIC', 48.75)" class="block w-full py-3 mt-6 border border-white/20 text-[10px] font-bold uppercase hover:bg-white hover:text-black">Select</button>
+                <button onclick="selectPackage('GLASS_CERAMIC', 48.75)" class="select-btn block w-full py-3 mt-6 border border-white/20 text-[10px] font-bold uppercase text-white bg-transparent transition-all duration-200">Select</button>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="gallery" class="max-w-7xl mx-auto px-8 py-16 border-t border-white/10">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
+            <div>
+                <h2 class="text-xs tracking-[0.4em] text-[#39FF14] uppercase font-bold mb-2 italic">// Gallery Proof</h2>
+                <p class="text-2xl font-black uppercase tracking-tight">Precision Restoration Showroom</p>
+            </div>
+            <div class="flex gap-2 border border-white/10 p-1 bg-black/40 rounded-lg">
+                <button onclick="filterGallery('all')" id="tab-all" class="gallery-tab px-4 py-2 text-[10px] font-bold uppercase rounded bg-[#39FF14] text-black transition-all">All Projects</button>
+                <button onclick="filterGallery('audi')" id="tab-audi" class="gallery-tab px-4 py-2 text-[10px] font-bold uppercase rounded text-gray-400 hover:text-white transition-all">Luxury Sedans</button>
+                <button onclick="filterGallery('truck')" id="tab-truck" class="gallery-tab px-4 py-2 text-[10px] font-bold uppercase rounded text-gray-400 hover:text-white transition-all">Truck / Utility</button>
+            </div>
+        </div>
+
+        <div id="galleryMatrix" class="space-y-16">
+            <div class="gallery-item" data-category="audi">
+                <div class="text-[10px] font-mono tracking-[0.2em] text-gray-500 uppercase mb-4 px-1">// RUN_01: Audi Left Side Profile Surface Finish</div>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="relative group rounded-xl overflow-hidden glass border border-white/5 bg-neutral-900">
+                        <div class="absolute top-4 left-4 z-20 bg-red-600/80 text-white font-mono text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded border border-red-500">Before</div>
+                        <div class="overflow-hidden aspect-video flex items-center justify-center">
+                            <img src="images/before_left_side_audi.png" onerror="this.src='https://via.placeholder.com/600x400/111/fff?text=Audi+Left+Before'" class="w-full h-full object-contain p-2 transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+                    <div class="relative group rounded-xl overflow-hidden glass border border-[#39FF14]/20 bg-neutral-900 shadow-[0_0_20px_rgba(57,255,20,0.05)]">
+                        <div class="absolute top-4 left-4 z-20 bg-[#39FF14]/90 text-black font-mono text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded border border-[#39FF14]">After</div>
+                        <div class="overflow-hidden aspect-video flex items-center justify-center">
+                            <img src="images/after_lft_side_audi.png" onerror="this.src='https://via.placeholder.com/600x400/111/39FF14?text=Audi+Left+After'" class="w-full h-full object-contain p-2 transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="audi">
+                <div class="text-[10px] font-mono tracking-[0.2em] text-gray-500 uppercase mb-4 px-1">// RUN_02: Audi Alternate Right Side Mirror Reflection</div>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="relative group rounded-xl overflow-hidden glass border border-white/5 bg-neutral-900">
+                        <div class="absolute top-4 left-4 z-20 bg-red-600/80 text-white font-mono text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded border border-red-500">Before</div>
+                        <div class="overflow-hidden aspect-video flex items-center justify-center">
+                            <img src="images/before_side_audi.png" onerror="this.src='https://via.placeholder.com/600x400/111/fff?text=Audi+Right+Before'" class="w-full h-full object-contain p-2 transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+                    <div class="relative group rounded-xl overflow-hidden glass border border-[#39FF14]/20 bg-neutral-900 shadow-[0_0_20px_rgba(57,255,20,0.05)]">
+                        <div class="absolute top-4 left-4 z-20 bg-[#39FF14]/90 text-black font-mono text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded border border-[#39FF14]">After</div>
+                        <div class="overflow-hidden aspect-video flex items-center justify-center">
+                            <img src="images/after_side_audi.png" onerror="this.src='https://via.placeholder.com/600x400/111/39FF14?text=Audi+Right+After'" class="w-full h-full object-contain p-2 transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="audi">
+                <div class="text-[10px] font-mono tracking-[0.2em] text-gray-500 uppercase mb-4 px-1">// RUN_03: Audi Rear Quarter-Panel Reflective Depth</div>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="relative group rounded-xl overflow-hidden glass border border-white/5 bg-neutral-900">
+                        <div class="absolute top-4 left-4 z-20 bg-red-600/80 text-white font-mono text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded border border-red-500">Before</div>
+                        <div class="overflow-hidden aspect-video flex items-center justify-center">
+                            <img src="images/before_rear_audi.jpg" onerror="this.src='https://via.placeholder.com/600x400/111/fff?text=Audi+Rear+Before'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+                    <div class="relative group rounded-xl overflow-hidden glass border border-[#39FF14]/20 bg-neutral-900 shadow-[0_0_20px_rgba(57,255,20,0.05)]">
+                        <div class="absolute top-4 left-4 z-20 bg-[#39FF14]/90 text-black font-mono text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded border border-[#39FF14]">After</div>
+                        <div class="overflow-hidden aspect-video flex items-center justify-center">
+                            <img src="images/after_rear_audi.jpg" onerror="this.src='https://via.placeholder.com/600x400/111/39FF14?text=Audi+Rear+After'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="truck">
+                <div class="text-[10px] font-mono tracking-[0.2em] text-gray-500 uppercase mb-4 px-1">// RUN_04: Ford Ranger Utility Cab Revitalization</div>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="relative group rounded-xl overflow-hidden glass border border-white/5 bg-neutral-900">
+                        <div class="absolute top-4 left-4 z-20 bg-red-600/80 text-white font-mono text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded border border-red-500">Before</div>
+                        <div class="overflow-hidden aspect-video flex items-center justify-center">
+                            <img src="images/before_truck.jpg" onerror="this.src='https://via.placeholder.com/600x400/111/fff?text=Truck+Before+Staging'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+                    <div class="relative group rounded-xl overflow-hidden glass border border-[#39FF14]/20 bg-neutral-900 shadow-[0_0_20px_rgba(57,255,20,0.05)]">
+                        <div class="absolute top-4 left-4 z-20 bg-[#39FF14]/90 text-black font-mono text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded border border-[#39FF14]">After</div>
+                        <div class="overflow-hidden aspect-video flex items-center justify-center">
+                            <img src="images/after_truck.jpg" onerror="this.src='https://via.placeholder.com/600x400/111/39FF14?text=Truck+After+Staging'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -116,11 +206,13 @@
                     <input type="tel" id="custPhone" placeholder="Phone Number (Loyalty ID)" required class="w-full bg-black/50 border border-white/10 p-4 text-xs text-white focus:border-[#39FF14] outline-none">
 
                     <input type="text" id="vehicle" placeholder="Year / Make / Model" required class="w-full bg-black/50 border border-white/10 p-4 text-xs text-white focus:border-[#39FF14] outline-none">
+
                     <div class="space-y-1">
                         <label class="text-[8px] text-gray-500 uppercase tracking-widest px-1">Select Time Window</label>
                         <input type="datetime-local" id="apptDate" required class="w-full bg-black/50 border border-white/10 p-4 text-xs text-[#39FF14] outline-none [color-scheme:dark]">
                     </div>
-                    <button type="submit" id="submitBtn" class="w-full bg-white text-black py-4 font-black uppercase text-[10px] tracking-[0.3em] hover:bg-[#39FF14] transition-all">Secure Booking</button>
+
+                    <button type="submit" id="submitBtn" class="w-full bg-[#39FF14] text-black py-4 font-black uppercase text-[10px] tracking-[0.3em] hover:bg-white transition-all">READY: FULL_DETAIL ($168.75)</button>
                 </form>
             </div>
 
@@ -149,13 +241,60 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // Dynamic Studio Tab Filter Logic Engine
+        window.filterGallery = (category) => {
+            const items = document.querySelectorAll('.gallery-item');
+            const tabs = document.querySelectorAll('.gallery-tab');
+
+            items.forEach(item => {
+                if (category === 'all' || item.getAttribute('data-category') === category) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            tabs.forEach(tab => {
+                tab.className = "gallery-tab px-4 py-2 text-[10px] font-bold uppercase rounded text-gray-400 hover:text-white transition-all";
+            });
+            const activeTab = document.getElementById(`tab-${category}`);
+            if (activeTab) {
+                activeTab.className = "gallery-tab px-4 py-2 text-[10px] font-bold uppercase rounded bg-[#39FF14] text-black transition-all";
+            }
+        };
+
+        // State Machine Controller for Selection Array
         window.selectPackage = (name, price) => {
             document.getElementById('selectedPkg').value = name;
             document.getElementById('pkgPrice').value = price;
             document.getElementById('submitBtn').innerText = `READY: ${name} ($${price})`;
-            document.getElementById('intake').scrollIntoView();
+
+            const allCards = document.querySelectorAll('.package-card');
+            allCards.forEach(card => {
+                card.classList.remove('border-[#39FF14]/40', 'scale-105', 'shadow-[0_0_30px_rgba(57,255,20,0.15)]');
+                card.classList.add('border-transparent');
+
+                const btn = card.querySelector('.select-btn');
+                if (btn) {
+                    btn.className = "select-btn block w-full py-3 mt-6 border border-white/20 text-[10px] font-bold uppercase text-white bg-transparent transition-all duration-200";
+                }
+            });
+
+            const activeCard = document.getElementById(name);
+            if (activeCard) {
+                activeCard.classList.remove('border-transparent');
+                activeCard.classList.add('border-[#39FF14]/40', 'scale-105', 'shadow-[0_0_30px_rgba(57,255,20,0.15)]');
+
+                const activeBtn = activeCard.querySelector('.select-btn');
+                if (activeBtn) {
+                    activeBtn.className = "select-btn block w-full py-4 mt-6 bg-[#39FF14] text-black text-[10px] font-bold uppercase transition-all duration-200";
+                }
+            }
+
+            document.getElementById('intake').scrollIntoView({ behavior: 'smooth' });
         };
 
+        // Form Submission to Firestore Node
         document.getElementById('bookingForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
@@ -177,6 +316,8 @@
                 btn.innerText = "SIGNAL LOCKED";
                 alert("Booking Secured. We will contact you shortly.");
                 e.target.reset();
+
+                window.selectPackage('FULL_DETAIL', 168.75);
             } catch (err) {
                 btn.innerText = "ERROR";
                 console.error(err);
@@ -185,7 +326,7 @@
             }
         });
 
-        // Live Testimonials
+        // Real-Time Listener: Customer Testimonials
         const qTest = query(collection(db, "Testimonial_Collection"), where("IS_VERIFIED_PURCHASER", "==", true), orderBy("SUBMISSION_TIMESTAMP", "desc"));
         onSnapshot(qTest, (snap) => {
             const display = document.getElementById('testimonialDisplay');

@@ -6,44 +6,519 @@
     <title>ZENITH SOLUTIONS | AGENT HUB</title>
     <style>
         :root {
-            --bg-pure: #050505; --accent-gold: #ffcc00; --accent-cyan: #00d4ff; --accent-red: #ff3300;
+            --bg-pure: #050505;
+            --bg-card: rgba(255, 255, 255, 0.02);
+            --bg-card-hover: rgba(0, 212, 255, 0.04);
+            --border-color: #1a1a1a;
+            --accent-gold: #ffcc00;
+            --accent-cyan: #00d4ff;
+            --accent-red: #ff3300;
+            --accent-green: #39FF14;
             --spectrum: linear-gradient(90deg, #ff0000, #ff8800, #ffcc00, #00d4ff, #ff0000);
+            --font-mono: 'Courier New', monospace;
         }
-        body, html { margin: 0; background: var(--bg-pure); color: white; font-family: 'Courier New', monospace; overflow-x: hidden; }
 
-        #gate-container { display: flex; justify-content: center; align-items: center; height: 100vh; transition: 0.8s; }
-        .landing-card { padding: 60px; background: #0a0a0a; border: 1px solid #1a1a1a; position: relative; text-align: center; }
-        .landing-card::after { content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; background: var(--spectrum); z-index: -1; animation: shimmer 4s linear infinite; }
-        @keyframes shimmer { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
+        * { box-sizing: border-box; }
 
-        .enter-btn { margin-top: 30px; background: linear-gradient(90deg, var(--accent-gold), var(--accent-cyan)); border: none; padding: 15px 40px; font-weight: 900; cursor: pointer; letter-spacing: 3px; }
+        body, html {
+            margin: 0;
+            padding: 0;
+            background: var(--bg-pure);
+            color: white;
+            font-family: var(--font-mono);
+            overflow-x: hidden;
+            height: 100%;
+        }
 
-        #agent-room { display: none; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 100px 50px; }
-        .agent-node { background: rgba(255,255,255,0.03); border: 1px solid #222; padding: 25px; transition: 0.4s; cursor: pointer; text-align: center; }
-        .agent-node:hover { border-color: var(--accent-red); transform: translateY(-10px); }
-        .agent-visual img { width: 100%; height: 180px; object-fit: cover; opacity: 0.6; }
-        .zoom-out { transform: scale(0.9); opacity: 0; pointer-events: none; }
+        /* --- LANDING GATE --- */
+        #gate-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.6s;
+            z-index: 100;
+            position: relative;
+        }
+
+        .landing-card {
+            padding: 60px;
+            background: #0a0a0a;
+            border: 1px solid var(--border-color);
+            position: relative;
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .landing-card::after {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: var(--spectrum);
+            z-index: -1;
+            animation: shimmer 4s linear infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .landing-card::after {
+                animation: none;
+            }
+        }
+
+        @keyframes shimmer {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        .enter-btn {
+            margin-top: 30px;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-cyan));
+            border: none;
+            padding: 15px 40px;
+            font-size: 1rem;
+            font-weight: 900;
+            color: black;
+            cursor: pointer;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .enter-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--accent-cyan);
+        }
+
+        /* --- THE FOUNDRY AREA WRAPPER --- */
+        #foundry-workspace {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            max-width: 1750px;
+            margin: 0 auto;
+            padding: 25px;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .foundry-header {
+            border-left: 4px solid var(--accent-red);
+            padding-left: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .foundry-header h2 {
+            color: var(--accent-gold);
+            margin: 0;
+            letter-spacing: 4px;
+            font-size: 1.8rem;
+        }
+
+        .status-tag {
+            color: var(--accent-green);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+        }
+
+        /* --- COMPOSABLE PIPELINE BUILDER PANEL --- */
+        #pipeline-builder {
+            background: #0a0a0a;
+            border: 1px dashed #333;
+            padding: 20px;
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .builder-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .chain-track {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 50px;
+            background: rgba(0,0,0,0.4);
+            padding: 10px;
+            border: 1px solid #111;
+            overflow-x: auto;
+        }
+
+        .chain-pill {
+            background: rgba(0, 214, 255, 0.1);
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            animation: pulseIn 0.3s ease-out;
+        }
+
+        .chain-pill .remove-node {
+            cursor: pointer;
+            color: var(--accent-red);
+            font-weight: 900;
+            padding-left: 4px;
+            transition: color 0.2s;
+        }
+
+        .chain-pill .remove-node:hover {
+            color: #ff5555;
+        }
+
+        .chain-arrow {
+            color: #444;
+            font-weight: bold;
+        }
+
+        .pipeline-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: 1px solid #444;
+            color: #aaa;
+            padding: 8px 20px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.2s;
+        }
+
+        .action-btn.primary {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .action-btn.primary:hover {
+            background: rgba(57, 255, 20, 0.05);
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
+        }
+
+        .action-btn:hover {
+            border-color: #fff;
+            color: #fff;
+        }
+
+        /* --- AGENT HIGH-DENSITY GRID DISPLAY --- */
+        #agent-room {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 15px;
+            width: 100%;
+        }
+
+        /* --- STREAMLINED COMPACT AGENT NODES --- */
+        .agent-node {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 0;
+            min-height: 260px;
+            transition: border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .agent-visual {
+            width: 100%;
+            height: 125px;
+            background: radial-gradient(circle at center, #111112 0%, #050506 100%);
+            border-bottom: 1px solid #111;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .agent-visual svg {
+            width: 85px;
+            height: 85px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .agent-info {
+            padding: 12px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .agent-info h3 {
+            color: var(--accent-gold);
+            margin: 0 0 6px 0;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .agent-info p {
+            font-size: 0.75rem;
+            color: #777;
+            line-height: 1.4;
+            margin: 0 0 12px 0;
+            max-height: 52px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: auto;
+        }
+
+        .node-btn {
+            background: rgba(255,255,255,0.01);
+            border: 1px solid #1c1c1c;
+            color: #888;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            padding: 5px 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            flex-grow: 1;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .node-btn:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: #555;
+            color: #fff;
+        }
+
+        .rental-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #111;
+            padding: 8px 12px;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .price {
+            color: #444;
+            font-weight: bold;
+            font-size: 0.65rem;
+            letter-spacing: 0.5px;
+        }
+
+        .status-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.65rem;
+            color: #444;
+        }
+
+        .status-indicator {
+            width: 5px;
+            height: 5px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 6px var(--accent-green);
+        }
+
+        /* --- TACTICAL SPECIFICATION OVERLAY PANEL --- */
+        #spec-panel-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(4px);
+            z-index: 500;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spec-drawer {
+            background: #0a0a0a;
+            border: 1px solid #222;
+            width: 90%;
+            max-width: 650px;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+        }
+
+        .spec-close {
+            position: absolute;
+            top: 20px; right: 25px;
+            color: #555;
+            cursor: pointer;
+            font-size: 1.5rem;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+
+        .spec-close:hover { color: var(--accent-red); }
+
+        .spec-title-block {
+            border-bottom: 1px solid #1c1c1c;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .spec-title-block h2 {
+            margin: 0; font-size: 1.4rem; letter-spacing: 2px;
+        }
+
+        .spec-domain-tag {
+            font-size: 0.75rem; text-transform: uppercase; margin-top: 5px; letter-spacing: 1px;
+        }
+
+        .spec-row {
+            margin-bottom: 20px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid #111;
+            padding: 15px;
+        }
+
+        .spec-label {
+            font-size: 0.7rem; color: #555; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 5px; font-weight: bold;
+        }
+
+        .spec-value {
+            font-size: 0.85rem; color: #eee; line-height: 1.5;
+        }
+
+        .spec-value.tool-highlight {
+            color: var(--accent-cyan); font-weight: bold;
+        }
+
+        /* --- ANIMATIONS --- */
+        .zoom-out {
+            transform: scale(0.97);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #loading-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-pure);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: var(--accent-green);
+            font-size: 1.1rem;
+            letter-spacing: 6px;
+        }
+
+        @keyframes pulseIn {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .landing-card { padding: 35px; }
+            #foundry-workspace { padding: 20px; }
+        }
     </style>
 </head>
 <body>
 
+    <div id="loading-overlay">LATCHING NEURAL STREAM...</div>
+
     <div id="gate-container">
         <div class="landing-card">
-            <h1 style="letter-spacing: 8px;">ZENITH AGENT HUB</h1>
+            <h1 style="letter-spacing: 12px; margin: 0; font-size: 2.5rem;">ZENITH</h1>
+            <p style="letter-spacing: 4px; color: #555; margin-top: 10px;">AGENTIC SOLUTIONS HUB</p>
+            <div style="height: 1px; background: #111; margin: 30px 0;"></div>
+            <p style="font-size: 0.8rem; color: #444;">PATH: /Volumes/X9 Pro/Zenith Rebuild Main/</p>
             <button class="enter-btn" id="enter-btn">ENTER FOUNDRY</button>
         </div>
     </div>
 
-    <div id="agent-room">
-        <div style="grid-column: 1/-1; border-left: 3px solid var(--accent-red); padding-left: 20px; margin-bottom: 30px;">
-            <h2 style="color: var(--accent-gold); margin:0;">LATTICE INDEX ACTIVE</h2>
-            <p style="color: #666;">Select a logic node to initialize rental protocol.</p>
+    <div id="foundry-workspace">
+        <header class="foundry-header">
+            <div>
+                <h2>LATTICE INDEX</h2>
+                <p style="color: #444; font-size: 0.8rem; margin: 5px 0 0 0;">v60.16_FACTORY_OS HIGH_DENSITY_ACTIVE</p>
+            </div>
+            <div class="status-tag">SIGNAL: STABLE // 432Hz</div>
+        </header>
+
+        <section id="pipeline-builder">
+            <div class="builder-meta">
+                <div>Composable Pipeline Multi-Tenant Chain Builder</div>
+                <div id="chain-count">Nodes Linked: 0</div>
+            </div>
+            <div class="chain-track" id="chain-track">
+                <div style="color: #222; font-size: 0.8rem; padding-left: 10px;" id="empty-track-msg">Select active components to construct sequence pipelines...</div>
+            </div>
+            <div class="pipeline-actions">
+                <button class="action-btn" id="clear-chain-btn">Reset Chain</button>
+                <button class="action-btn primary" id="execute-chain-btn">Execute Governed Pipeline</button>
+            </div>
+        </section>
+
+        <main id="agent-room"></main>
+    </div>
+
+    <div id="spec-panel-overlay">
+        <div class="spec-drawer" id="spec-drawer-box">
+            <span class="spec-close" id="spec-panel-close">×</span>
+            <div class="spec-title-block">
+                <h2 id="spec-title-text">AGENT TITLE</h2>
+                <div id="spec-domain-text" class="spec-domain-tag">DOMAIN CATEGORY</div>
+            </div>
+
+            <div class="spec-row">
+                <div class="spec-label">Core Operational Mission</div>
+                <div class="spec-value" id="spec-mission-text">Mission parameters description payload.</div>
+            </div>
+
+            <div class="spec-row">
+                <div class="spec-label">Sharp Engineering Tool</div>
+                <div class="spec-value tool-highlight" id="spec-tool-text">Tool Definition Class</div>
+            </div>
+
+            <div class="spec-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: transparent; border: none; padding: 0;">
+                <div class="spec-row" style="margin: 0;">
+                    <div class="spec-label">Expected Data Inflow</div>
+                    <div class="spec-value" id="spec-inflow-text">Data parameters object.</div>
+                </div>
+                <div class="spec-row" style="margin: 0;">
+                    <div class="spec-label">Expected Data Outflow</div>
+                    <div class="spec-value" id="spec-outflow-text">Token contract object.</div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             databaseURL: "https://zenith-hub-2026-official-default-rtdb.firebaseio.com/"
@@ -52,37 +527,331 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        document.getElementById('enter-btn').onclick = () => {
-            document.getElementById('gate-container').classList.add('zoom-out');
+        const enterBtn = document.getElementById('enter-btn');
+        const gate = document.getElementById('gate-container');
+        const workspace = document.getElementById('foundry-workspace');
+        const room = document.getElementById('agent-room');
+        const loader = document.getElementById('loading-overlay');
+
+        const chainTrack = document.getElementById('chain-track');
+        const chainCount = document.getElementById('chain-count');
+        const clearChainBtn = document.getElementById('clear-chain-btn');
+        const executeChainBtn = document.getElementById('execute-chain-btn');
+        const emptyTrackMsg = document.getElementById('empty-track-msg');
+
+        // Overlay Components
+        const specOverlay = document.getElementById('spec-panel-overlay');
+        const specClose = document.getElementById('spec-panel-close');
+        const specTitle = document.getElementById('spec-title-text');
+        const specDomain = document.getElementById('spec-domain-text');
+        const specMission = document.getElementById('spec-mission-text');
+        const specTool = document.getElementById('spec-tool-text');
+        const specInflow = document.getElementById('spec-inflow-text');
+        const specOutflow = document.getElementById('spec-outflow-text');
+
+        let selectedActiveChain = [];
+
+        enterBtn.onclick = () => {
+            gate.classList.add('zoom-out');
             setTimeout(() => {
-                document.getElementById('gate-container').style.display = 'none';
-                document.getElementById('agent-room').style.display = 'grid';
-                syncAgents();
+                gate.style.display = 'none';
+                loader.style.display = 'flex';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    workspace.style.display = 'flex';
+                    setTimeout(() => workspace.style.opacity = '1', 50);
+                    syncMarketplace();
+                }, 1200);
             }, 600);
         };
 
-        function syncAgents() {
+        function syncMarketplace() {
             const marketplaceRef = ref(db, 'public_marketplace');
             onValue(marketplaceRef, (snapshot) => {
-                const room = document.getElementById('agent-room');
-                room.querySelectorAll('.agent-node').forEach(n => n.remove());
+                const existingNodes = room.querySelectorAll('.agent-node');
+                existingNodes.forEach(n => n.remove());
+
                 const data = snapshot.val();
                 if (data) {
-                    Object.keys(data).forEach(key => {
-                        const agent = data[key];
-                        const node = document.createElement('div');
-                        node.className = 'agent-node';
-                        node.onclick = () => window.location.href = agent.stripe_link || '#';
-                        node.innerHTML = `
-                            <div class="agent-visual"><img src="${agent.avatar_url || ''}" onerror="this.src='https://via.placeholder.com/300x180/000/ff3300?text=NODE_LOCKED'"></div>
-                            <h3 style="color:var(--accent-gold);">${agent.name}</h3>
-                            <p style="font-size:0.8rem; color:#888;">${agent.desc}</p>
-                            <div style="color:var(--accent-cyan); font-size:0.7rem; margin-top:15px;">RENTAL: ${agent.rental_price}</div>
-                        `;
-                        room.appendChild(node);
+                    Object.keys(data).sort().forEach(key => {
+                        createAgentNode(key, data[key]);
                     });
+                } else {
+                    displayEmptyState();
                 }
             });
+        }
+
+        // --- ALGORITHMIC PROCEDURAL MANDALA VECTOR GENERATOR ---
+        function generateJobDescriptionMandala(title, desc, fallbackColor, nodeKey) {
+            const upperTitle = title.toUpperCase();
+            const lowerDesc = desc.toLowerCase();
+
+            // Extract the numerical position from the database path key (e.g., node_034 -> 34)
+            let nodeId = 0;
+            if (nodeKey) {
+                const match = nodeKey.match(/\d+/);
+                if (match) nodeId = parseInt(match[0], 10);
+            }
+            if (nodeId === 0) {
+                const titleMatch = upperTitle.match(/\d+/);
+                if (titleMatch) nodeId = parseInt(titleMatch[0], 10);
+            }
+            if (nodeId === 0) {
+                nodeId = title.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % 192;
+            }
+
+            // 1. Assign Job Domain Frequency Colors
+            let color = fallbackColor || "#00d4ff";
+            if (upperTitle.includes("TRAINING") || upperTitle.includes("CONDITION") || upperTitle.includes("SLA") || upperTitle.includes("MANDATED") || lowerDesc.includes("legal") || lowerDesc.includes("compliance") || lowerDesc.includes("reporter") || lowerDesc.includes("charter")) {
+                color = "#FFD700"; // Legal Gold Matrix
+            } else if (upperTitle.includes("LEDGER") || upperTitle.includes("IP_") || upperTitle.includes("SECURITY") || upperTitle.includes("DATABASE") || upperTitle.includes("FIREBASE") || lowerDesc.includes("network") || lowerDesc.includes("sanitized") || lowerDesc.includes("encryption")) {
+                color = "#4169E1"; // Infrastructure Blue Torus
+            } else if (upperTitle.includes("DISPATCH") || upperTitle.includes("BRIDGE") || upperTitle.includes("SMS") || upperTitle.includes("OUTBOUND") || lowerDesc.includes("growth") || lowerDesc.includes("channel") || lowerDesc.includes("webhook")) {
+                color = "#3CB371"; // Outbound Green Lattice
+            } else if (upperTitle.includes("ANALYTICS") || upperTitle.includes("VALUATION") || upperTitle.includes("LEAKAGE") || upperTitle.includes("VELOCITY") || upperTitle.includes("INTENT") || lowerDesc.includes("metric") || lowerDesc.includes("modeler")) {
+                color = "#8A2BE2"; // Analytics Purple Field
+            } else if (upperTitle.includes("HYDRATOR") || upperTitle.includes("EMAILER") || upperTitle.includes("BANNER") || lowerDesc.includes("copy") || lowerDesc.includes("variable") || lowerDesc.includes("text")) {
+                color = "#FF4500"; // NLG Orange Spiral
+            } else if (fallbackColor === "var(--accent-cyan)" || !fallbackColor) {
+                // Distribute standard fallback colors evenly across remaining unmapped spaces using index distribution
+                const spectrumBuckets = ["#DC143C", "#4169E1", "#3CB371", "#8A2BE2", "#FF4500", "#FFD700"];
+                color = spectrumBuckets[nodeId % spectrumBuckets.length];
+            }
+
+            // 2. Compute Unique Algorithmic Geometry Formations per Node ID
+            let svgGeometryLines = "";
+            const totalVertices = 3 + (nodeId % 7);               // Outer polygonal vertices calculation (3-9 points)
+            const internalVertices = 3 + ((nodeId * 2) % 6);       // Inner star symmetry vertices calculation
+            const radiusOuter = 26 + (nodeId % 14);               // Variable geometric frame spread boundary
+            const radiusInner = 10 + (nodeId % 11);               // Variable inner frame tracking anchor r
+            const degreeSpinAngle = (nodeId * 15) % 360;          // Deterministic alignment orientation offset
+
+            function calculateRingPoints(cx, cy, r, vertices, angleOffsetDegrees) {
+                let pointCoordinates = [];
+                for (let i = 0; i < vertices; i++) {
+                    let calculatedRadians = (i * (2 * Math.PI / vertices)) + (angleOffsetDegrees * Math.PI / 180);
+                    let positionX = cx + r * Math.cos(calculatedRadians);
+                    let positionY = cy + r * Math.sin(calculatedRadians);
+                    pointCoordinates.push(`${positionX.toFixed(1)},${positionY.toFixed(1)}`);
+                }
+                return pointCoordinates.join(" ");
+            }
+
+            const outerRingPolygon = calculateRingPoints(50, 50, radiusOuter, totalVertices, degreeSpinAngle);
+            const innerRingPolygon = calculateRingPoints(50, 50, radiusInner, internalVertices, degreeSpinAngle + 180);
+
+            // Layer the custom generated procedural paths onto the component canvas vector space
+            svgGeometryLines += `<polygon points="${outerRingPolygon}" stroke="${color}" stroke-width="1.5" fill="none" opacity="0.9"/>`;
+            svgGeometryLines += `<polygon points="${innerRingPolygon}" stroke="${color}" stroke-width="1.0" fill="none" opacity="0.6" stroke-dasharray="${(nodeId % 3 === 0) ? '3 3' : 'none'}"/>`;
+
+            // Inject secondary visual criteria metrics using numerical structural features
+            if (nodeId % 2 === 0) {
+                svgGeometryLines += `<circle cx="50" cy="50" r="${Math.min(radiusOuter + 5, 46)}" stroke="${color}" stroke-width="0.75" stroke-dasharray="2 4" fill="none" opacity="0.5"/>`;
+            } else {
+                for (let i = 0; i < totalVertices; i++) {
+                    let calculatedRadians = (i * (2 * Math.PI / totalVertices)) + (degreeSpinAngle * Math.PI / 180);
+                    let positionX = 50 + radiusOuter * Math.cos(calculatedRadians);
+                    let positionY = 50 + radiusOuter * Math.sin(calculatedRadians);
+                    svgGeometryLines += `<line x1="50" y1="50" x2="${positionX.toFixed(1)}" y2="${positionY.toFixed(1)}" stroke="${color}" stroke-width="0.5" opacity="0.4"/>`;
+                }
+            }
+
+            // Central core hardware processing node link dot anchor
+            svgGeometryLines += `<circle cx="50" cy="50" r="3" fill="${color}"/>`;
+
+            return `
+                <div style="position: absolute; width: 45px; height: 45px; background: ${color}; filter: blur(35px); opacity: 0.12; pointer-events: none; z-index: 1;"></div>
+                <svg viewBox="0 0 100 100">
+                    ${svgGeometryLines}
+                </svg>
+            `;
+        }
+
+        function createAgentNode(key, agent) {
+            const node = document.createElement('div');
+            node.className = 'agent-node';
+
+            const displayTitle = agent.name || "FOUNDRY_NODE";
+            let displayDesc = agent.desc || "Autonomous processing block.";
+            displayDesc = displayDesc.replace(/[\r\n]+/g, " ").trim();
+
+            const displayPrice = agent.rental_price || "$10.00";
+            const accentColor = (agent.metadata && agent.metadata.accent_color) || "var(--accent-cyan)";
+            const underlyingTool = (agent.metadata && agent.metadata.underlying_tool) || "Atomic Script Unit";
+
+            let structuralId = 0;
+            const match = key.match(/\d+/);
+            if (match) structuralId = parseInt(match[0], 10);
+
+            node.innerHTML = `
+                <div class="agent-visual" id="visual-node-${structuralId}">
+                    </div>
+                <div class="agent-info">
+                    <h3>${displayTitle}</h3>
+                    <p title="${agent.desc}">${displayDesc}</p>
+                    <div class="card-actions">
+                        <button class="node-btn checkout-action">Rent</button>
+                        <button class="node-btn add-chain" style="border-color: ${accentColor}4D; color: ${accentColor};" data-id="${structuralId}" data-title="${displayTitle}">Link</button>
+                    </div>
+                </div>
+                <div class="rental-bar">
+                    <div class="price">${displayPrice}</div>
+                    <div class="status-container">
+                        <span>${agent.status || 'ONLINE'}</span>
+                        <div class="status-indicator" style="background: ${agent.status === 'ONLINE' ? 'var(--accent-green)' : '#555'}; box-shadow: 0 0 6px ${agent.status === 'ONLINE' ? 'var(--accent-green)' : '#111'};"></div>
+                    </div>
+                </div>
+            `;
+
+            // Process dynamic vector calculations passing down title, description, baseline fallback colors, and target db snapshot path keys
+            const visualContainer = node.querySelector('.agent-visual');
+            visualContainer.innerHTML = generateJobDescriptionMandala(displayTitle, displayDesc, accentColor, key);
+
+            // Clicking the card body invokes the detailed tactical layout breakdown overlay panel
+            node.onclick = () => {
+                invokeTacticalBreakdownPanel(structuralId, displayTitle, agent, accentColor, underlyingTool);
+            };
+
+            node.onmouseenter = () => {
+                node.style.borderColor = accentColor;
+                node.style.backgroundColor = "var(--bg-card-hover)";
+            };
+            node.onmouseleave = () => {
+                node.style.borderColor = "var(--border-color)";
+                node.style.backgroundColor = "var(--bg-card)";
+            };
+
+            const linkBtn = node.querySelector('.add-chain');
+            linkBtn.onmouseenter = () => linkBtn.style.backgroundColor = `${accentColor}1A`;
+            linkBtn.onmouseleave = () => linkBtn.style.backgroundColor = 'transparent';
+
+            node.querySelector('.checkout-action').onclick = (e) => {
+                e.stopPropagation();
+                const checkoutUrl = agent.stripe_link || (agent.metadata && agent.metadata.stripe_link);
+                if (checkoutUrl) window.location.href = checkoutUrl;
+                else alert(`Billing offline for [${displayTitle}].`);
+            };
+
+            linkBtn.onclick = (e) => {
+                e.stopPropagation();
+                if (structuralId === 0) return;
+                appendNodeToPipeline(structuralId, displayTitle);
+            };
+
+            room.appendChild(node);
+        }
+
+        // INJECT COMPREHENSIVE TECHNICAL CRITERIA DYNAMICALLY BASED ON ID SCALING
+        function invokeTacticalBreakdownPanel(id, title, agent, color, tool) {
+            const domain = (agent.metadata && agent.metadata.domain) || "Zenith Operating Segment";
+
+            specTitle.innerText = `NODE_${id.toString().padStart(3, '0')} // ${title}`;
+            specTitle.style.color = color;
+            specDomain.innerText = domain;
+            specDomain.style.color = `${color}BB`;
+
+            specMission.innerText = `Responsible to isolate, compute, and systematically automate specific operational parameters inside the ${domain} architecture frame.`;
+            specTool.innerText = tool;
+            specTool.style.color = color;
+
+            // --- EXPANDED DATA CONTRACT SPECIFICATION PIPELINE ---
+            if (id === 1) {
+                specInflow.innerText = "Target Network Parameters & Query Strings";
+                specOutflow.innerText = "Raw Inbound Text Block Memory String Payload";
+            } else if (id === 2) {
+                specInflow.innerText = "Raw Unformatted Ingress Text Logs";
+                specOutflow.innerText = "Structured Lead JSON Entity Dictionary Object";
+            } else if (id === 3) {
+                specInflow.innerText = "Structured Lead JSON Entity Dictionary Object";
+                specOutflow.innerText = "Computed Priority Allocation & Intent Weight Classification Token";
+            } else if (id === 4) {
+                specInflow.innerText = "Computed Priority Allocation & Intent Weight Classification Token";
+                specOutflow.innerText = "Enriched Corporate Firmographic Profile Document Asset";
+            } else if (id === 5) {
+                specInflow.innerText = "Enriched Corporate Firmographic Profile Document Asset";
+                specOutflow.innerText = "Aggregated Social Footprint Metadata Token Group";
+            } else if (id === 33) {
+                specInflow.innerText = "Multi-Tenant Operational Dataset Vectors";
+                specOutflow.innerText = "Flagged Performance Drift Clustered Array ID Tokens";
+            } else if (id === 34) {
+                specInflow.innerText = "Upstream Flagged Performance Drift Anomaly Counts";
+                specOutflow.innerText = "Delta Profit Margin Leakage Risk Verification Token";
+            } else {
+                specInflow.innerText = `Upstream Shared Data Payloads [Token N_${(id-1).toString().padStart(3, '0')}_Out]`;
+                specOutflow.innerText = `Downstream Data Payload Package [Token N_${id.toString().padStart(3, '0')}_Out]`;
+            }
+
+            specOverlay.style.display = 'flex';
+        }
+
+        // Close overlay conditions
+        specClose.onclick = () => specOverlay.style.display = 'none';
+        specOverlay.onclick = (e) => { if (e.target === specOverlay) specOverlay.style.display = 'none'; };
+
+        function appendNodeToPipeline(id, title) {
+            emptyTrackMsg.style.display = 'none';
+            selectedActiveChain.push(id);
+            rebuildVisualChainTrack();
+        }
+
+        function rebuildVisualChainTrack() {
+            chainTrack.innerHTML = '';
+            if (selectedActiveChain.length === 0) {
+                chainTrack.appendChild(emptyTrackMsg);
+                emptyTrackMsg.style.display = 'block';
+                chainCount.innerText = `Nodes Linked: 0`;
+                return;
+            }
+
+            selectedActiveChain.forEach((nodeId, idx) => {
+                if (idx > 0) {
+                    const arrow = document.createElement('div');
+                    arrow.className = 'chain-arrow';
+                    arrow.innerText = '➔';
+                    chainTrack.appendChild(arrow);
+                }
+
+                const pill = document.createElement('div');
+                pill.className = 'chain-pill';
+                pill.innerHTML = `N_${nodeId.toString().padStart(3, '0')} <span class="remove-node" data-index="${idx}">×</span>`;
+
+                pill.querySelector('.remove-node').onclick = (e) => {
+                    e.stopPropagation();
+                    selectedActiveChain.splice(idx, 1);
+                    rebuildVisualChainTrack();
+                };
+
+                chainTrack.appendChild(pill);
+            });
+
+            chainCount.innerText = `Nodes Linked: ${selectedActiveChain.length}`;
+        }
+
+        clearChainBtn.onclick = () => {
+            selectedActiveChain = [];
+            rebuildVisualChainTrack();
+        };
+
+        executeChainBtn.onclick = () => {
+            if (selectedActiveChain.length === 0) return;
+            const pipelineExecutionRef = ref(db, 'agent_hub/web_composition_trigger');
+            set(pipelineExecutionRef, {
+                chain_sequence: selectedActiveChain,
+                timestamp: new Date().toISOString(),
+                origin: "HIGH_DENSITY_WEB_PORTAL",
+                status: "PENDING_BACKEND_PULSE"
+            }).then(() => {
+                alert(`🚀 PIPELINE DEPLOYED!\nNode 001 router has seized chain sequence: [${selectedActiveChain.join(', ')}]`);
+            });
+        };
+
+        function displayEmptyState() {
+            const msg = document.createElement('div');
+            msg.className = 'agent-node';
+            msg.style.gridColumn = '1/-1';
+            msg.innerHTML = '<div style="padding: 40px; text-align: center; color: #333;">LATTICE FEED EMPTY.</div>';
+            room.appendChild(msg);
         }
     </script>
 </body>

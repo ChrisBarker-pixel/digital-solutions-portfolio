@@ -67,6 +67,30 @@
         }
         .manifesto .highlight { color: var(--gold); font-weight: 600; }
 
+        /* --- FORM STYLING --- */
+        .inlet-form {
+            background: var(--charcoal);
+            padding: 40px;
+            border: 1px solid var(--border);
+            margin-top: 40px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .inlet-input, .inlet-select {
+            width: 100%;
+            padding: 15px;
+            background: #050505;
+            border: 1px solid var(--border);
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+        .inlet-select { color: var(--gold); }
+        .charter-extra { display: none; margin-top: 20px; }
+
         /* --- INVESTMENT LATTICE --- */
         .investment-lattice {
             display: grid; grid-template-columns: repeat(3, 1fr);
@@ -110,7 +134,7 @@
             display: inline-block; padding: 22px 65px; background: var(--neon-sprout);
             color: black; text-decoration: none; font-weight: 900;
             text-transform: uppercase; letter-spacing: 3px; margin-top: 40px;
-            transition: 0.3s;
+            transition: 0.3s; cursor: pointer; border: none;
         }
         .btn-action:hover { background: white; transform: translateY(-3px); box-shadow: 0 5px 15px var(--neon-sprout); }
 
@@ -119,7 +143,7 @@
         @media (max-width: 1100px) {
             header { flex-direction: column; gap: 40px; }
             .company-name { font-size: 1.8rem; }
-            .investment-lattice, .lineage-stack { grid-template-columns: 1fr; }
+            .investment-lattice, .lineage-stack, .form-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -144,7 +168,32 @@
             By combining the hard and soft aspects of traditional Chinese martial arts, Sprout Wing Chun offers a path that is beneficial for all stages of life. To ensure the highest fidelity of transmission, training is typically conducted <span class="highlight">one-on-one</span> for the best results.
         </p>
 
-        <div style="text-align: center;">
+        <!-- STUDENT INTAKE INLET -->
+        <div class="inlet-form">
+            <h3 style="font-family: 'Cinzel', serif; color: var(--gold); margin-bottom: 25px; letter-spacing: 2px;">Charter Enrollment & Student Intake</h3>
+            <form id="wingChunInlet">
+                <div class="form-grid">
+                    <input type="text" id="studentName" class="inlet-input" placeholder="Student Full Name" required>
+                    <input type="text" id="parentPhone" class="inlet-input" placeholder="Parent Phone / Loyalty ID" required>
+                </div>
+
+                <select id="charterStatus" class="inlet-select">
+                    <option value="private">Private Enrollment</option>
+                    <option value="charter">Charter School (Voucher/Instructional Funds)</option>
+                </select>
+
+                <div id="charterFields" class="charter-extra">
+                    <div class="form-grid">
+                        <input type="text" id="schoolName" class="inlet-input" placeholder="School (e.g. CORE, Arete)">
+                        <input type="text" id="teacherES" class="inlet-input" placeholder="Teacher / ES Name">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-action" style="width: 100%; margin-top: 30px;">Initialize Enrollment</button>
+            </form>
+        </div>
+
+        <div style="text-align: center; margin-top: 60px;">
             <a href="https://calendly.com/sproutwingchun" class="btn-action" target="_blank">Book Your Session</a>
             <p style="margin-top: 50px; color: var(--gold); font-weight: bold; font-size: 0.9rem; letter-spacing: 4px; text-transform: uppercase;">Grass Valley | Nevada City | California</p>
         </div>
@@ -186,5 +235,28 @@
         &copy; 2026 SPROUT WING CHUN | SIFU CHRIS BARKER | POWERED BY ZENITH OS
     </footer>
 
+    <script>
+        // Toggle Charter Fields
+        document.getElementById('charterStatus').addEventListener('change', function() {
+            document.getElementById('charterFields').style.display = (this.value === 'charter') ? 'block' : 'none';
+        });
+
+        // Submit to Zenith OS Bridge
+        document.getElementById('wingChunInlet').onsubmit = async (e) => {
+            e.preventDefault();
+            const payload = {
+                name: document.getElementById('studentName').value,
+                phone: document.getElementById('parentPhone').value,
+                type: document.getElementById('charterStatus').value,
+                school: document.getElementById('schoolName').value || 'N/A',
+                teacher: document.getElementById('teacherES').value || 'N/A',
+                timestamp: new Date().toISOString()
+            };
+
+            // Log to Zenith OS Console (Simulated for this script)
+            console.log("ZENITH_INLET_SIGNAL: Enrolling student...", payload);
+            alert("Signal Received. Enrollment processed via Zenith OS.");
+        };
+    </script>
 </body>
 </html>
