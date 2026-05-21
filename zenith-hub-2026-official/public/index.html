@@ -573,8 +573,36 @@
 
                 const data = snapshot.val();
                 if (data) {
+                    // 🚨 HARD SECURITY BOUNDARY: Define keys that must NEVER be rendered on the SaaS fronted
+                    const EXCLUDED_PRIVATE_KEYS = [
+                        "STARWASH DETAILING STOREFRONT LINK",
+                        "SPROUT WING CHUN IDENTITY REGISTRY",
+                        "LOCAL ENTITY BUSINESS LICENSE VALIDATOR",
+                        "LOCAL FRANCHISE REVENUE DISTRIBUTER",
+                        "LOCAL MARKETING OFFICE COORDINATOR",
+                        "LOCAL SERVICE RANKING RADAR",
+                        "CUSTOMER REVIEW TEXT SENTIMENT SCANNER",
+                        "GOOGLE BUSINESS PROFILE SYNC PIPELINE",
+                        "YELP FOR BUSINESS INGRESS MONITOR",
+                        "CHARTER SCHOOL ROSTER INTEGRATOR",
+                        "STUDENT FACING RISK SCREENING LOOP"
+                    ];
+
                     Object.keys(data).sort().forEach(key => {
-                        createAgentNode(key, data[key]);
+                        const nodeData = data[key];
+                        const nodeNameUpper = nodeData && nodeData.name ? nodeData.name.toUpperCase() : "";
+                        const nodeKeyUpper = key.toUpperCase();
+
+                        // Intercept step: Force immediate dropout if personal metadata markers trigger
+                        const isPrivate = EXCLUDED_PRIVATE_KEYS.some(privateKey =>
+                            nodeKeyUpper.includes(privateKey) || nodeNameUpper.includes(privateKey)
+                        );
+
+                        if (!isPrivate) {
+                            createAgentNode(key, nodeData);
+                        } else {
+                            console.log(`🛡️ UI EDGE BOUNDARY: Filtered out isolated private data node [${key}]`);
+                        }
                     });
                 } else {
                     displayEmptyState();
@@ -587,7 +615,6 @@
             const upperTitle = title.toUpperCase();
             const lowerDesc = desc.toLowerCase();
 
-            // Extract the numerical position from the database path key (e.g., node_034 -> 34)
             let nodeId = 0;
             if (nodeKey) {
                 const match = nodeKey.match(/\d+/);
@@ -604,28 +631,27 @@
             // 1. Assign Job Domain Frequency Colors
             let color = fallbackColor || "#00d4ff";
             if (upperTitle.includes("TRAINING") || upperTitle.includes("CONDITION") || upperTitle.includes("SLA") || upperTitle.includes("MANDATED") || lowerDesc.includes("legal") || lowerDesc.includes("compliance") || lowerDesc.includes("reporter") || lowerDesc.includes("charter")) {
-                color = "#FFD700"; // Legal Gold Matrix
+                color = "#FFD700";
             } else if (upperTitle.includes("LEDGER") || upperTitle.includes("IP_") || upperTitle.includes("SECURITY") || upperTitle.includes("DATABASE") || upperTitle.includes("FIREBASE") || lowerDesc.includes("network") || lowerDesc.includes("sanitized") || lowerDesc.includes("encryption")) {
-                color = "#4169E1"; // Infrastructure Blue Torus
+                color = "#4169E1";
             } else if (upperTitle.includes("DISPATCH") || upperTitle.includes("BRIDGE") || upperTitle.includes("SMS") || upperTitle.includes("OUTBOUND") || lowerDesc.includes("growth") || lowerDesc.includes("channel") || lowerDesc.includes("webhook")) {
-                color = "#3CB371"; // Outbound Green Lattice
+                color = "#3CB371";
             } else if (upperTitle.includes("ANALYTICS") || upperTitle.includes("VALUATION") || upperTitle.includes("LEAKAGE") || upperTitle.includes("VELOCITY") || upperTitle.includes("INTENT") || lowerDesc.includes("metric") || lowerDesc.includes("modeler")) {
-                color = "#8A2BE2"; // Analytics Purple Field
+                color = "#8A2BE2";
             } else if (upperTitle.includes("HYDRATOR") || upperTitle.includes("EMAILER") || upperTitle.includes("BANNER") || lowerDesc.includes("copy") || lowerDesc.includes("variable") || lowerDesc.includes("text")) {
-                color = "#FF4500"; // NLG Orange Spiral
+                color = "#FF4500";
             } else if (fallbackColor === "var(--accent-cyan)" || !fallbackColor) {
-                // Distribute standard fallback colors evenly across remaining unmapped spaces using index distribution
                 const spectrumBuckets = ["#DC143C", "#4169E1", "#3CB371", "#8A2BE2", "#FF4500", "#FFD700"];
                 color = spectrumBuckets[nodeId % spectrumBuckets.length];
             }
 
             // 2. Compute Unique Algorithmic Geometry Formations per Node ID
             let svgGeometryLines = "";
-            const totalVertices = 3 + (nodeId % 7);               // Outer polygonal vertices calculation (3-9 points)
-            const internalVertices = 3 + ((nodeId * 2) % 6);       // Inner star symmetry vertices calculation
-            const radiusOuter = 26 + (nodeId % 14);               // Variable geometric frame spread boundary
-            const radiusInner = 10 + (nodeId % 11);               // Variable inner frame tracking anchor r
-            const degreeSpinAngle = (nodeId * 15) % 360;          // Deterministic alignment orientation offset
+            const totalVertices = 3 + (nodeId % 7);
+            const internalVertices = 3 + ((nodeId * 2) % 6);
+            const radiusOuter = 26 + (nodeId % 14);
+            const radiusInner = 10 + (nodeId % 11);
+            const degreeSpinAngle = (nodeId * 15) % 360;
 
             function calculateRingPoints(cx, cy, r, vertices, angleOffsetDegrees) {
                 let pointCoordinates = [];
@@ -641,11 +667,9 @@
             const outerRingPolygon = calculateRingPoints(50, 50, radiusOuter, totalVertices, degreeSpinAngle);
             const innerRingPolygon = calculateRingPoints(50, 50, radiusInner, internalVertices, degreeSpinAngle + 180);
 
-            // Layer the custom generated procedural paths onto the component canvas vector space
             svgGeometryLines += `<polygon points="${outerRingPolygon}" stroke="${color}" stroke-width="1.5" fill="none" opacity="0.9"/>`;
             svgGeometryLines += `<polygon points="${innerRingPolygon}" stroke="${color}" stroke-width="1.0" fill="none" opacity="0.6" stroke-dasharray="${(nodeId % 3 === 0) ? '3 3' : 'none'}"/>`;
 
-            // Inject secondary visual criteria metrics using numerical structural features
             if (nodeId % 2 === 0) {
                 svgGeometryLines += `<circle cx="50" cy="50" r="${Math.min(radiusOuter + 5, 46)}" stroke="${color}" stroke-width="0.75" stroke-dasharray="2 4" fill="none" opacity="0.5"/>`;
             } else {
@@ -657,7 +681,6 @@
                 }
             }
 
-            // Central core hardware processing node link dot anchor
             svgGeometryLines += `<circle cx="50" cy="50" r="3" fill="${color}"/>`;
 
             return `
@@ -685,8 +708,7 @@
             if (match) structuralId = parseInt(match[0], 10);
 
             node.innerHTML = `
-                <div class="agent-visual" id="visual-node-${structuralId}">
-                    </div>
+                <div class="agent-visual" id="visual-node-${structuralId}"></div>
                 <div class="agent-info">
                     <h3>${displayTitle}</h3>
                     <p title="${agent.desc}">${displayDesc}</p>
@@ -704,11 +726,9 @@
                 </div>
             `;
 
-            // Process dynamic vector calculations passing down title, description, baseline fallback colors, and target db snapshot path keys
             const visualContainer = node.querySelector('.agent-visual');
             visualContainer.innerHTML = generateJobDescriptionMandala(displayTitle, displayDesc, accentColor, key);
 
-            // Clicking the card body invokes the detailed tactical layout breakdown overlay panel
             node.onclick = () => {
                 invokeTacticalBreakdownPanel(structuralId, displayTitle, agent, accentColor, underlyingTool);
             };
@@ -742,7 +762,6 @@
             room.appendChild(node);
         }
 
-        // INJECT COMPREHENSIVE TECHNICAL CRITERIA DYNAMICALLY BASED ON ID SCALING
         function invokeTacticalBreakdownPanel(id, title, agent, color, tool) {
             const domain = (agent.metadata && agent.metadata.domain) || "Zenith Operating Segment";
 
@@ -755,7 +774,6 @@
             specTool.innerText = tool;
             specTool.style.color = color;
 
-            // --- EXPANDED DATA CONTRACT SPECIFICATION PIPELINE ---
             if (id === 1) {
                 specInflow.innerText = "Target Network Parameters & Query Strings";
                 specOutflow.innerText = "Raw Inbound Text Block Memory String Payload";
@@ -766,7 +784,7 @@
                 specInflow.innerText = "Structured Lead JSON Entity Dictionary Object";
                 specOutflow.innerText = "Computed Priority Allocation & Intent Weight Classification Token";
             } else if (id === 4) {
-                specInflow.innerText = "Computed Priority Allocation & Intent Weight Classification Token";
+                specInflow.innerText = "Structured Lead JSON Entity Dictionary Object";
                 specOutflow.innerText = "Enriched Corporate Firmographic Profile Document Asset";
             } else if (id === 5) {
                 specInflow.innerText = "Enriched Corporate Firmographic Profile Document Asset";
@@ -785,7 +803,6 @@
             specOverlay.style.display = 'flex';
         }
 
-        // Close overlay conditions
         specClose.onclick = () => specOverlay.style.display = 'none';
         specOverlay.onclick = (e) => { if (e.target === specOverlay) specOverlay.style.display = 'none'; };
 

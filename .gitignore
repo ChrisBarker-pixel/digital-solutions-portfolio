@@ -68,9 +68,8 @@ node_modules/
 # dataconnect generated files
 .dataconnect
 # Firebase & Security
-*.json
-!portal_nodes_MASTER.json  # Keep your node structure, but hide keys
 serviceAccountKey.json
+vault/
 
 # Python Environment
 __pycache__/
@@ -79,3 +78,12 @@ __pycache__/
 
 # Local OS Metadata
 .DS_Store
+
+# Absolute Data Isolation Safeguards
+*.json
+*.png
+*.jpg
+*.jpeg
+spreadsheets/
+archives/
+whiteboard_core.py

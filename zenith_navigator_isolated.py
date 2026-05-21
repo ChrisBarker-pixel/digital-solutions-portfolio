@@ -26,9 +26,9 @@ class CloudLattice:
             pass
 
 
-# --- 🧠 THE NAVIGATOR KERNEL (V2.1 SCROLL-LATCH) ---
-class ZenithNavigator(tk.Toplevel):  # Changed to Toplevel for Master Core Handshake
-    def __init__(self, parent=None):  # Added parent for Bi-Directional Latch
+# --- 🧠 THE NAVIGATOR KERNEL (V2.3 BATCH-SYNC AUTOMATION) ---
+class ZenithNavigator(tk.Toplevel):
+    def __init__(self, parent=None):
         if parent is None:
             # Standalone Boot Logic
             self.root = tk.Tk()
@@ -123,20 +123,30 @@ class ZenithNavigator(tk.Toplevel):  # Changed to Toplevel for Master Core Hands
                     # 🛡️ THE BLUEPRINT FILTER
                     if os.path.isfile(full):
                         if not item.endswith('.json') or not self.is_zenith_scene(full):
-                            continue  # Hide configs, firebase.json, etc.
+                            continue
 
                     itype = "DIR" if os.path.isdir(full) else "FILE"
                     tree.insert("", tk.END, values=(item, full, itype), tags=('col',))
             except:
                 pass
 
+        elif key == "RAM":
+            # Dynamic tracking link back to master RAM states
+            try:
+                for n_id, data in sorted(self.active_lattice.items()):
+                    title = data.get('title', f"NODE_{int(n_id):03d}")
+                    tree.insert("", tk.END, values=(title, str(n_id), "NODE"), tags=('col',))
+            except:
+                pass
+
     def is_zenith_scene(self, path):
-        """🔍 Peeks at the file to see if it holds Node IDs."""
+        """🔍 Peeks at the file to see if it holds Node IDs or wrap metrics."""
         try:
             with open(path, 'r') as f:
-                content = f.read(200)  # Only read the start for speed
+                content = f.read(500)  # Expanded window to intercept modern metadata strings
                 import re
-                # Matches patterns like "1": or '16': at the start of the JSON
+                if "lattice_data" in content:
+                    return True
                 return bool(re.search(r'["\']\d+["\']\s*:', content))
         except:
             return False
@@ -150,7 +160,6 @@ class ZenithNavigator(tk.Toplevel):  # Changed to Toplevel for Master Core Hands
         if key == "RAM":
             if self.parent:
                 from __main__ import NodeEditor
-                # Ensure the path (ID) exists in the parent lattice before calling
                 node_id = int(path)
                 if node_id in self.parent.active_lattice:
                     NodeEditor(self.parent, node_id, self.parent.active_lattice[node_id])
@@ -163,10 +172,8 @@ class ZenithNavigator(tk.Toplevel):  # Changed to Toplevel for Master Core Hands
                 self.db_path = f"{path}/"
             self.refresh_pillar(key)
         else:
-            # 🛰️ THIS IS THE TRIGGER
+            # Double-clicking an isolated file passes a direct atomic sync call
             self.add_to_ram(name, path, key)
-            if self.parent:
-                self.parent.remanifest_grid()  # Force-draw the scene
 
     def add_to_ram(self, name, path, origin):
         """🛰️ HARDENED_LATCH: Sanitizes and Rehydrates Node Manifests."""
@@ -175,36 +182,45 @@ class ZenithNavigator(tk.Toplevel):  # Changed to Toplevel for Master Core Hands
                 with open(path, 'r', encoding='utf-8') as f:
                     raw_content = f.read().strip()
 
-                # 🛡️ THE SANITIZER: Handles empty files and potential corruption
                 if not raw_content:
                     raise ValueError("File is empty.")
 
                 try:
                     data = json.loads(raw_content)
                 except json.JSONDecodeError:
-                    # Attempt a "Soft Repair" for single quotes if strict JSON fails
                     import ast
                     data = ast.literal_eval(raw_content)
                     self.parent.log_system("⚠️ REPAIR: Handled non-standard JSON syntax.", "WARNING")
 
-                # 🧬 SCHEMA VALIDATION
-                if isinstance(data, dict) and any(k.isdigit() for k in data.keys()):
-                    self.parent.log_system(f"🌀 REHYDRATING: {name}...", "ZENITH")
+                # Isolate nodes inside nested object maps or flat profiles automatically
+                nodes = data.get('lattice_data', data)
+                if isinstance(nodes, str):
+                    nodes = json.loads(nodes)
 
-                    # Atomic Update: Clear and Inject
+                if isinstance(nodes, dict):
+                    self.parent.log_system(f"🌀 REHYDRATING FIELD FROM NAV: {name}...", "ZENITH")
+
+                    # Performance Safety: Erase current footprint to cleanly isolate new configuration
                     self.parent.active_lattice.clear()
-                    for k, v in data.items():
-                        if k.isdigit():
+
+                    for k, v in nodes.items():
+                        try:
                             self.parent.active_lattice[int(k)] = v
+                        except ValueError:
+                            continue
 
                     self.parent.remanifest_grid()
-                    self.parent.log_system("✅ LATCH_SUCCESS.", "SUCCESS")
+                    self.parent.log_system(f"✅ LATCH_SUCCESS: Loaded {name} matrix configuration.", "SUCCESS")
+                    self.refresh_pillar("RAM")
                 else:
                     self.parent.log_system(f"📜 CONFIG: Opening {name} in Editor.", "INFO")
                     self.open_editor(name, path, origin)
 
             except Exception as e:
                 self.parent.log_system(f"❌ LATCH_ERR: {e}", "DANGER")
+        else:
+            if origin != "SSD":
+                self.open_editor(name, path, origin)
 
     def on_drill_up(self, event, key):
         if key == "SSD":
@@ -216,23 +232,41 @@ class ZenithNavigator(tk.Toplevel):  # Changed to Toplevel for Master Core Hands
             self.db_path = "/" + "/".join(parts[:-1]) + "/" if len(parts) > 1 else "/"
         self.refresh_pillar(key)
 
-
-
     def batch_sync(self, key):
-        """🔥 MASS_REHYDRATION: Latches all pillar nodes to the Master grid."""
-        tree = self.pillars[key]
-        for item_id in tree.get_children():
-            name, path, itype = tree.item(item_id)['values']
-            # Ignore directories and collections; only sync files/docs
-            if itype not in ["DIR", "COL", "KEY"]:
-                self.add_to_ram(name, path, key)
+        """🔥 ATOMIC BATCH SYNC: Wipes active matrix and loads highlighted file fresh."""
+        if not self.parent:
+            return
 
-        # After the batch, force the grid to redraw
-        if self.parent:
-            self.parent.remanifest_grid()
+        tree = self.pillars[key]
+        sel = tree.selection()
+
+        # Pull highlighted index, default to top file if selection state is null
+        if sel:
+            name, path, itype = tree.item(sel[0])['values']
+        else:
+            children = tree.get_children()
+            if not children:
+                return
+            name, path, itype = tree.item(children[0])['values']
+
+        if itype not in ["DIR", "COL", "KEY"] and path.endswith(".json"):
+            # Target clean injection via unified tracking method
+            self.add_to_ram(name, path, key)
+        else:
+            # Fallback traditional loop if mass syncing unstructured lists
+            for item_id in tree.get_children():
+                n, p, t = tree.item(item_id)['values']
+                if t not in ["DIR", "COL", "KEY"]:
+                    self.add_to_ram(n, p, key)
+
+        self.parent.remanifest_grid()
+        self.refresh_pillar("RAM")
 
     def clear_ram(self):
-        self.ram_buffer = []
+        if self.parent:
+            self.parent.active_lattice.clear()
+            self.parent.remanifest_grid()
+            self.parent.log_system("🧹 RAM WIPE: Intercepted grid environment purged.", "WARNING")
         self.refresh_pillar("RAM")
 
     def open_editor(self, label, path, origin):
@@ -247,7 +281,7 @@ class ZenithNavigator(tk.Toplevel):  # Changed to Toplevel for Master Core Hands
                 with open(path, 'r', encoding='utf-8', errors='ignore') as f:
                     payload = f.read()
             elif origin == "DB":
-                r = requests.get(f"{self.rtdb_url}{path}.json");
+                r = requests.get(f"{self.rtdb_url}{path}.json")
                 payload = json.dumps(r.json(), indent=4)
             elif origin == "FS":
                 doc = self.cloud.fs.collection(self.fs_depth[-1]).document(path).get()
